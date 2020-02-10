@@ -10,6 +10,7 @@
 - this指向
 - Promise
 - 运行机制
+- Typescript【指南】
 
 ## Spring
 
@@ -19,7 +20,17 @@
 ## Java
 
 - 线程
+
+> - 线程API
+> - 线程通信
+> - 线程池
+
 - 并发
+
+> - 并发容器
+> - 锁
+> - ThreadLocal
+
 - Socket
 
 ## 算法
