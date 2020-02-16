@@ -18,7 +18,7 @@ const Promise = require('./18.promise')
  * 6.每一个promise实例都有一个then()
  */
 const p = new Promise((resolve, reject) => {
-  resolve('Get it!')
+  setTimeout(() => resolve('Get it!'), 1000)
   // throw new Error('Failed')   // 这句话加不加不影响，反正已经resolve成功了
 })
 p.then(data => console.log(data), err => console.log(err))

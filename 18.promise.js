@@ -11,15 +11,19 @@ class Promise {
   constructor(executor) {
     this.value = undefined, this.reason = undefined
     this.status = Status.PENDING
+    this.onResolveCallbacks = []
+    this.onRejectCallbacks = []
     // 2.executor函数中有两个参数(也是函数)，resolve reject
     // 3.用户可能会调用这个resolve()/reject()，会传入成功的值（失败的原因）
     const resolve = (value) => {
       this.value = value
       this.status = Status.FULFILLED
+      this.onResolveCallbacks.forEach(fn => fn())
     }
     const reject = (reason) => {
       this.reason = reason
       this.status = Status.REJECTED
+      this.onRejectCallbacks.forEach(fn => fn())
     }
     // 1.创建Promise executor会立即执行
     // 4.executor可能会报异常 throw new Error()
@@ -33,6 +37,12 @@ class Promise {
   then(onFulfilled, onRejected) {
     if (this.status === Status.FULFILLED) onFulfilled(this.value)
     if (this.status === Status.REJECTED) onRejected(this.reason)
+
+    // executor 是异步的情况
+    if (this.status === Status.PENDING) {
+      this.onResolveCallbacks.push(() => onFulfilled(this.value))
+      this.onRejectCallbacks.push(() => onRejected(this.value))
+    }
   }
 }
 
