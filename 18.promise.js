@@ -35,14 +35,22 @@ class Promise {
   }
 
   then(onFulfilled, onRejected) {
-    if (this.status === Status.FULFILLED) onFulfilled(this.value)
-    if (this.status === Status.REJECTED) onRejected(this.reason)
-
-    // executor 是异步的情况
-    if (this.status === Status.PENDING) {
-      this.onResolveCallbacks.push(() => onFulfilled(this.value))
-      this.onRejectCallbacks.push(() => onRejected(this.value))
-    }
+    let promise2 = new Promise((resolve, reject) => {
+      if (this.status === Status.FULFILLED) {
+        let res = onFulfilled(this.value)
+        resolve(res)
+      }
+      if (this.status === Status.REJECTED) { 
+        onRejected(this.reason)
+      }
+  
+      // executor 是异步的情况
+      if (this.status === Status.PENDING) {
+        this.onResolveCallbacks.push(() => onFulfilled(this.value))
+        this.onRejectCallbacks.push(() => onRejected(this.value))
+      }
+    })
+    return promise2
   }
 }
 
